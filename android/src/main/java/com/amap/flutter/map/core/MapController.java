@@ -65,6 +65,7 @@ public class MapController
         amap.addOnMapLongClickListener(this);
         amap.addOnMapClickListener(this);
         amap.addOnPOIClickListener(this);
+        amap.setInfoWindowAdapter(new MyInfoWindow(mapView.getContext()));
     }
 
     @Override
