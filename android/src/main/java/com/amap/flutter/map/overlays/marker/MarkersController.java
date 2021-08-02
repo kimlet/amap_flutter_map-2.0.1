@@ -1,16 +1,22 @@
 package com.amap.flutter.map.overlays.marker;
 
+import android.content.Context;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.TextureMapView;
+import com.amap.api.maps.model.BitmapDescriptor;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Poi;
 import com.amap.api.maps.model.Polyline;
+import com.amap.flutter.amap_flutter_map.R;
 import com.amap.flutter.map.MyMethodCallHandler;
 import com.amap.flutter.map.overlays.AbstractOverlayController;
 import com.amap.flutter.map.utils.Const;
@@ -39,9 +45,11 @@ public class MarkersController
         AMap.OnPOIClickListener {
     private static final String CLASS_NAME = "MarkersController";
     private String selectedMarkerDartId;
+    private Context context;
 
-    public MarkersController(MethodChannel methodChannel, AMap amap) {
+    public MarkersController(Context context, MethodChannel methodChannel, AMap amap) {
         super(methodChannel, amap);
+        this.context = context;
         amap.addOnMarkerClickListener(this);
         amap.addOnMarkerDragListener(this);
         amap.addOnMapClickListener(this);
@@ -96,8 +104,15 @@ public class MarkersController
         if (null != amap) {
             MarkerOptionsBuilder builder = new MarkerOptionsBuilder();
             String dartMarkerId = MarkerUtil.interpretMarkerOptions(markerObj, builder);
+            final Map<?, ?> data = ConvertUtil.toMap(markerObj);
+            final Object infoWindow = data.get("infoWindow");
+            String title = (String) ((Map<String, Object>) infoWindow).get("title");
+            String snippet = (String) ((Map<String, Object>) infoWindow).get("snippet");
+
             if (!TextUtils.isEmpty(dartMarkerId)) {
                 MarkerOptions markerOptions = builder.build();
+                markerOptions.infoWindowEnable(false);
+                markerOptions.icon(getBitmapDescriptor(title, snippet));
                 final Marker marker = amap.addMarker(markerOptions);
                 Object clickable = ConvertUtil.getKeyValueFromMapObject(markerObj, "clickable");
                 if (null != clickable) {
@@ -110,6 +125,22 @@ public class MarkersController
             }
         }
 
+    }
+
+    protected BitmapDescriptor getBitmapDescriptor(String title, String snippet) {
+        View view = null;
+        view = View.inflate(context, R.layout.info_window, null);
+        TextView textView = ((TextView) view.findViewById(R.id.tv_title));
+        TextView subTitleView = ((TextView) view.findViewById(R.id.tv_sub_title));
+        subTitleView.setText(snippet);
+        if (TextUtils.isEmpty(snippet)) {
+            subTitleView.setVisibility(View.GONE);
+        } else {
+            subTitleView.setVisibility(View.VISIBLE);
+        }
+        textView.setText(title);
+
+        return BitmapDescriptorFactory.fromView(view);
     }
 
     private void updateByList(List<Object> markersToChange) {

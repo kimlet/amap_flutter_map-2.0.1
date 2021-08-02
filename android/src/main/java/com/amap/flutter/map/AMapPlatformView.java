@@ -68,7 +68,7 @@ public class AMapPlatformView
             mapView = new TextureMapView(context, options);
             AMap amap = mapView.getMap();
             mapController = new MapController(methodChannel, mapView);
-            markersController = new MarkersController(methodChannel, amap);
+            markersController = new MarkersController(getView().getContext(), methodChannel, amap);
             polylinesController = new PolylinesController(methodChannel, amap);
             polygonsController = new PolygonsController(methodChannel, amap);
             initMyMethodCallHandlerMap();
