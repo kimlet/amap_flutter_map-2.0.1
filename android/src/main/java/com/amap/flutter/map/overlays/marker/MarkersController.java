@@ -8,14 +8,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Poi;
-import com.amap.api.maps.model.Polyline;
 import com.amap.flutter.amap_flutter_map.R;
 import com.amap.flutter.map.MyMethodCallHandler;
 import com.amap.flutter.map.overlays.AbstractOverlayController;
@@ -128,6 +126,9 @@ public class MarkersController
     }
 
     protected BitmapDescriptor getBitmapDescriptor(String title, String snippet) {
+        if ("index".equals(snippet)) {
+            return BitmapDescriptorFactory.fromResource(R.drawable.ic_my_position);
+        }
         View view = null;
         view = View.inflate(context, R.layout.info_window, null);
         TextView textView = ((TextView) view.findViewById(R.id.tv_title));
@@ -139,6 +140,7 @@ public class MarkersController
             subTitleView.setVisibility(View.VISIBLE);
         }
         textView.setText(title);
+
 
         return BitmapDescriptorFactory.fromView(view);
     }
