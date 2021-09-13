@@ -11,6 +11,8 @@ class CameraPosition {
     required this.target,
     this.tilt = 0.0,
     this.zoom = 10,
+    this.southwest,
+    this.northeast,
   });
 
   /// 可视区域指向的方向，以角度为单位，从正北向逆时针方向计算，从0 度到360 度。
@@ -18,6 +20,10 @@ class CameraPosition {
 
   /// 目标位置的屏幕中心点经纬度坐标。
   final LatLng target;
+  
+  /// 屏幕范围
+  final LatLng? southwest;
+  final LatLng? northeast;
 
   /// 目标可视区域的倾斜度，以角度为单位。范围从0到360度
   final double tilt;
@@ -33,6 +39,8 @@ class CameraPosition {
         'target': target.toJson(),
         'tilt': tilt,
         'zoom': zoom,
+        'southwest': southwest?.toJson(),
+        'northeast': northeast?.toJson(),
       };
 
   /// 从Map转换成[CameraPosition]
@@ -51,6 +59,8 @@ class CameraPosition {
       target: target,
       tilt: json['tilt'],
       zoom: json['zoom'],
+      southwest: LatLng.fromJson(json['southwest']),
+      northeast: LatLng.fromJson(json['northeast']),
     );
   }
 

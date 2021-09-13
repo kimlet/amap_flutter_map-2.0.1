@@ -110,7 +110,7 @@ public class MarkersController
             if (!TextUtils.isEmpty(dartMarkerId)) {
                 MarkerOptions markerOptions = builder.build();
                 markerOptions.infoWindowEnable(false);
-                markerOptions.icon(getBitmapDescriptor(title, snippet));
+                markerOptions.icon(getBitmapDescriptor(false, title, snippet));
                 final Marker marker = amap.addMarker(markerOptions);
                 Object clickable = ConvertUtil.getKeyValueFromMapObject(markerObj, "clickable");
                 if (null != clickable) {
@@ -125,12 +125,15 @@ public class MarkersController
 
     }
 
-    protected BitmapDescriptor getBitmapDescriptor(String title, String snippet) {
+    protected BitmapDescriptor getBitmapDescriptor(boolean selected, String title, String snippet) {
         if ("index".equals(snippet)) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_my_position);
         }
         View view = null;
         view = View.inflate(context, R.layout.info_window, null);
+        if ("district".equals(snippet)) {
+            view.setBackgroundResource(selected ? R.drawable.ic_map_circle_selected : R.drawable.ic_map_circle);
+        }
         TextView textView = ((TextView) view.findViewById(R.id.tv_title));
         TextView subTitleView = ((TextView) view.findViewById(R.id.tv_sub_title));
         subTitleView.setText(snippet);
@@ -185,6 +188,7 @@ public class MarkersController
     private void showMarkerInfoWindow(String dartMarkId) {
         MarkerController markerController = controllerMapByDartId.get(dartMarkId);
         if (null != markerController) {
+            markerController.setIcon(getBitmapDescriptor(dartMarkId.equals(selectedMarkerDartId), markerController.getMarker().getTitle(), markerController.getMarker().getSnippet()));
             markerController.showInfoWindow();
         }
     }
@@ -198,6 +202,8 @@ public class MarkersController
         }
         MarkerController markerController = controllerMapByDartId.get(dartMarkId);
         if (null != markerController) {
+            markerController.setIcon(getBitmapDescriptor(false, markerController.getMarker().getTitle(), markerController.getMarker().getSnippet()));
+
             if (null != newPosition && null != markerController.getPosition()) {
                 if (markerController.getPosition().equals(newPosition)) {
                     return;
@@ -220,6 +226,7 @@ public class MarkersController
         }
         final Map<String, Object> data = new HashMap<>(1);
         data.put("markerId", dartId);
+        hideMarkerInfoWindow(selectedMarkerDartId, null);
         selectedMarkerDartId = dartId;
         showMarkerInfoWindow(dartId);
         methodChannel.invokeMethod("marker#onTap", data);

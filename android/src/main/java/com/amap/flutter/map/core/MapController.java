@@ -300,7 +300,7 @@ public class MapController
     public void onCameraChangeFinish(CameraPosition cameraPosition) {
         if (null != methodChannel) {
             final Map<String, Object> arguments = new HashMap<String, Object>(2);
-            arguments.put("position", ConvertUtil.cameraPositionToMap(cameraPosition));
+            arguments.put("position", ConvertUtil.cameraAndScreenPositionToMap(amap, cameraPosition));
             methodChannel.invokeMethod("camera#onMoveEnd", arguments);
             LogUtil.i(CLASS_NAME, "onCameraChangeFinish===>" + arguments);
         }

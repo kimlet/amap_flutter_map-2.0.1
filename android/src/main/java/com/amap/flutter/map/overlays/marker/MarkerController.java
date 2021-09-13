@@ -29,8 +29,12 @@ class MarkerController implements MarkerOptionsSink {
         }
     }
 
+    public Marker getMarker() {
+        return marker;
+    }
+
     public LatLng getPosition() {
-        if(null != marker) {
+        if (null != marker) {
             return marker.getPosition();
         }
         return null;

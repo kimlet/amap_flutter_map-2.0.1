@@ -141,6 +141,20 @@ public class ConvertUtil {
         data.put("zoom", position.zoom);
         return data;
     }
+    public static Object cameraAndScreenPositionToMap(AMap aMap, CameraPosition position) {
+        if (position == null) {
+            return null;
+        }
+        LatLngBounds bounds = aMap.getProjection().getMapBounds(position.target, position.zoom);
+        final Map<String, Object> data = new HashMap<>();
+        data.put("bearing", position.bearing);
+        data.put("target", latLngToList(position.target));
+        data.put("southwest", latLngToList(bounds.southwest));
+        data.put("northeast", latLngToList(bounds.northeast));
+        data.put("tilt", position.tilt);
+        data.put("zoom", position.zoom);
+        return data;
+    }
 
     /**
      * 转换AMapOptions
