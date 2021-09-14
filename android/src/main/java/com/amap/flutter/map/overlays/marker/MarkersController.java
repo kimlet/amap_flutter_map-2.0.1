@@ -21,6 +21,9 @@ import com.amap.flutter.map.utils.Const;
 import com.amap.flutter.map.utils.ConvertUtil;
 import com.amap.flutter.map.utils.LogUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,17 +134,35 @@ public class MarkersController
         }
         View view = null;
         view = View.inflate(context, R.layout.info_window, null);
-        if ("district".equals(snippet)) {
-            view.setBackgroundResource(selected ? R.drawable.ic_map_circle_selected : R.drawable.ic_map_circle);
-        }
         TextView textView = ((TextView) view.findViewById(R.id.tv_title));
         TextView subTitleView = ((TextView) view.findViewById(R.id.tv_sub_title));
-        subTitleView.setText(snippet);
+
         if (TextUtils.isEmpty(snippet)) {
             subTitleView.setVisibility(View.GONE);
         } else {
             subTitleView.setVisibility(View.VISIBLE);
         }
+        if (null != snippet && snippet.startsWith("{")) {
+            try {
+                JSONObject jsonObject = new JSONObject(snippet);
+                String type = jsonObject.getString("type");
+                String num = jsonObject.getString("num");
+                boolean defaultSelected = jsonObject.getBoolean("selected");
+                if ("DISTRICT".equals(type) || "PRECINCT".equals(type)) {
+                    view.setBackgroundResource(selected ? R.drawable.ic_map_circle_selected : R.drawable.ic_map_circle);
+                    textView.setTextColor(selected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
+                    subTitleView.setTextColor(selected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
+                    subTitleView.setText(num);
+                } else if ("COMMUNITY".equals(type)) {
+                    textView.setTextColor(selected ? context.getResources().getColor(android.R.color.holo_green_dark) : context.getResources().getColor(android.R.color.white));
+                    subTitleView.setVisibility(View.GONE);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         textView.setText(title);
 
 
