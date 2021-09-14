@@ -1,6 +1,7 @@
 package com.amap.flutter.map.overlays.marker;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -149,12 +150,15 @@ public class MarkersController
                 String num = jsonObject.getString("num");
                 boolean defaultSelected = jsonObject.getBoolean("selected");
                 if ("DISTRICT".equals(type) || "PRECINCT".equals(type)) {
-                    view.setBackgroundResource(selected ? R.drawable.ic_map_circle_selected : R.drawable.ic_map_circle);
-                    textView.setTextColor(selected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
-                    subTitleView.setTextColor(selected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
+                    view.setBackgroundResource(selected || defaultSelected ? R.drawable.ic_map_circle_selected : R.drawable.ic_map_circle);
+                    textView.setTextColor(selected || defaultSelected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
+                    subTitleView.setTextColor(selected || defaultSelected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
                     subTitleView.setText(num);
                 } else if ("COMMUNITY".equals(type)) {
-                    textView.setTextColor(selected ? context.getResources().getColor(android.R.color.holo_green_dark) : context.getResources().getColor(android.R.color.white));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        view.setBackground(selected ? context.getDrawable(R.drawable.ic_info_window_selected_bg) : context.getDrawable(R.drawable.ic_info_window_bg));
+                    }
+//                    textView.setTextColor(selected ? context.getResources().getColor(android.R.color.holo_green_dark) : context.getResources().getColor(android.R.color.white));
                     subTitleView.setVisibility(View.GONE);
                 }
 
