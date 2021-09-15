@@ -149,17 +149,28 @@ public class MarkersController
                 String type = jsonObject.getString("type");
                 String num = jsonObject.getString("num");
                 boolean defaultSelected = jsonObject.getBoolean("selected");
-                if ("DISTRICT".equals(type) || "PRECINCT".equals(type)) {
+                if ("DISTRICT".equals(type) || "PRECINCT".equals(type) || "metroCircle".equals(type)) {
                     view.setBackgroundResource(selected || defaultSelected ? R.drawable.ic_map_circle_selected : R.drawable.ic_map_circle);
                     textView.setTextColor(selected || defaultSelected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
                     subTitleView.setTextColor(selected || defaultSelected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
                     subTitleView.setText(num);
-                } else if ("COMMUNITY".equals(type)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        view.setBackground(selected ? context.getDrawable(R.drawable.ic_info_window_selected_bg) : context.getDrawable(R.drawable.ic_info_window_bg));
+                    if("metroCircle".equals(type)){
+                        subTitleView.setVisibility(View.GONE);
                     }
+                } else if ("COMMUNITY".equals(type) || "metroText".equals(type)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        view.setBackground(selected || defaultSelected ? context.getDrawable(R.drawable.ic_info_window_selected_bg) : context.getDrawable(R.drawable.ic_info_window_bg));
+                    }
+                    if("metroText".equals(type)){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            textView.setCompoundDrawablesWithIntrinsicBounds(context.getDrawable(R.drawable.ic_metro), null, null, null);
+                        }
+                    }
+
 //                    textView.setTextColor(selected ? context.getResources().getColor(android.R.color.holo_green_dark) : context.getResources().getColor(android.R.color.white));
                     subTitleView.setVisibility(View.GONE);
+                }else if("metroPoint".equals(type)){
+                    return BitmapDescriptorFactory.fromResource(R.drawable.ic_map_point);
                 }
 
             } catch (JSONException e) {
