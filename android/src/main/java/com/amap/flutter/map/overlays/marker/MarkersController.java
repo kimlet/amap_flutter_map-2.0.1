@@ -28,6 +28,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -48,6 +50,7 @@ public class MarkersController
     private static final String CLASS_NAME = "MarkersController";
     private String selectedMarkerDartId;
     private Context context;
+    private ExecutorService executors = Executors.newSingleThreadExecutor();
 
     public MarkersController(Context context, MethodChannel methodChannel, AMap amap) {
         super(methodChannel, amap);
@@ -81,16 +84,22 @@ public class MarkersController
      * @param methodCall
      * @param result
      */
-    public void invokeMarkerOptions(MethodCall methodCall, MethodChannel.Result result) {
+    public void invokeMarkerOptions(final MethodCall methodCall, MethodChannel.Result result) {
         if (null == methodCall) {
             return;
         }
-        Object markersToAdd = methodCall.argument("markersToAdd");
-        addByList((List<Object>) markersToAdd);
-        Object markersToChange = methodCall.argument("markersToChange");
-        updateByList((List<Object>) markersToChange);
-        Object markerIdsToRemove = methodCall.argument("markerIdsToRemove");
-        removeByIdList((List<Object>) markerIdsToRemove);
+        executors.submit(new Runnable() {
+            @Override
+            public void run() {
+                Object markersToAdd = methodCall.argument("markersToAdd");
+                addByList((List<Object>) markersToAdd);
+                Object markersToChange = methodCall.argument("markersToChange");
+                updateByList((List<Object>) markersToChange);
+                Object markerIdsToRemove = methodCall.argument("markerIdsToRemove");
+                removeByIdList((List<Object>) markerIdsToRemove);
+            }
+        });
+        
         result.success(null);
     }
 
