@@ -158,15 +158,18 @@ public class MarkersController
                 String type = jsonObject.getString("type");
                 String num = jsonObject.getString("num");
                 boolean defaultSelected = jsonObject.getBoolean("selected");
-                if ("DISTRICT".equals(type) || "PRECINCT".equals(type) || "metroCircle".equals(type)) {
+                if ("DISTRICT".equals(type) || "PRECINCT".equals(type) || "metroCircle".equals(type) || "school".equals(type)) {
                     view.setBackgroundResource(selected || defaultSelected ? R.drawable.ic_map_circle_selected : R.drawable.ic_map_circle);
                     textView.setTextColor(selected || defaultSelected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
                     subTitleView.setTextColor(selected || defaultSelected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
                     subTitleView.setText(num);
+                    if(TextUtils.isEmpty(num)){
+                        subTitleView.setVisibility(View.GONE);
+                    }
                     if("metroCircle".equals(type)){
                         subTitleView.setVisibility(View.GONE);
                     }
-                } else if ("COMMUNITY".equals(type) || "metroText".equals(type)) {
+                } else if ("COMMUNITY".equals(type) || "metroText".equals(type) ) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         view.setBackground(selected || defaultSelected ? context.getDrawable(R.drawable.ic_info_window_selected_bg) : context.getDrawable(R.drawable.ic_info_window_bg));
                     }
