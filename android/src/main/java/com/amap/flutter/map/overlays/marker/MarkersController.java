@@ -177,7 +177,7 @@ public class MarkersController
                     }
                 } else if ("COMMUNITY".equals(type) || "metroText".equals(type)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        view.setBackground(selected || defaultSelected ? context.getDrawable(R.drawable.ic_info_window_selected_bg) : context.getDrawable(R.drawable.ic_info_window_bg));
+                        view.setBackground(selected ? context.getDrawable(R.drawable.ic_info_window_selected_bg) : context.getDrawable(R.drawable.ic_info_window_bg));
                     }
                     if ("metroText".equals(type)) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
