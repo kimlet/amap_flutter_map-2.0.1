@@ -118,6 +118,10 @@ class AMapController {
     return _methodChannel.setRenderFps(fps, mapId: mapId);
   }
 
+  Future<void> hideMarkerInfoWindow(){
+    return _methodChannel.clearInfoWindow(mapId: mapId);
+  }
+
   ///地图截屏
   Future<Uint8List?> takeSnapshot() {
     return _methodChannel.takeSnapshot(mapId: mapId);

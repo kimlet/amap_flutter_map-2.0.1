@@ -74,6 +74,12 @@ public class MarkersController
             case Const.METHOD_MARKER_UPDATE:
                 invokeMarkerOptions(call, result);
                 break;
+            case Const.METHOD_MARKER_CLEAR_INFO_WINDOW:
+                hideMarkerInfoWindow(selectedMarkerDartId, null);
+                selectedMarkerDartId = "";
+                result  .success(null);
+                break;
+
         }
     }
 
@@ -99,7 +105,7 @@ public class MarkersController
                 removeByIdList((List<Object>) markerIdsToRemove);
             }
         });
-        
+
         result.success(null);
     }
 
@@ -163,17 +169,17 @@ public class MarkersController
                     textView.setTextColor(selected || defaultSelected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
                     subTitleView.setTextColor(selected || defaultSelected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
                     subTitleView.setText(num);
-                    if(TextUtils.isEmpty(num)){
+                    if (TextUtils.isEmpty(num)) {
                         subTitleView.setVisibility(View.GONE);
                     }
-                    if("metroCircle".equals(type)){
+                    if ("metroCircle".equals(type)) {
                         subTitleView.setVisibility(View.GONE);
                     }
-                } else if ("COMMUNITY".equals(type) || "metroText".equals(type) ) {
+                } else if ("COMMUNITY".equals(type) || "metroText".equals(type)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         view.setBackground(selected || defaultSelected ? context.getDrawable(R.drawable.ic_info_window_selected_bg) : context.getDrawable(R.drawable.ic_info_window_bg));
                     }
-                    if("metroText".equals(type)){
+                    if ("metroText".equals(type)) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             textView.setCompoundDrawablesWithIntrinsicBounds(context.getDrawable(R.drawable.ic_metro), null, null, null);
                         }
@@ -181,7 +187,7 @@ public class MarkersController
 
 //                    textView.setTextColor(selected ? context.getResources().getColor(android.R.color.holo_green_dark) : context.getResources().getColor(android.R.color.white));
                     subTitleView.setVisibility(View.GONE);
-                }else if("metroPoint".equals(type)){
+                } else if ("metroPoint".equals(type)) {
                     return BitmapDescriptorFactory.fromResource(R.drawable.ic_map_point);
                 }
 

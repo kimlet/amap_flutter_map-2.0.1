@@ -244,6 +244,11 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
     });
   }
 
+  ///清除选中marker
+  Future<void> clearInfoWindow({required int mapId}) {
+    return channel(mapId).invokeMethod<void>('markers#clearInfoWindow');
+  }
+
   ///截屏
   Future<Uint8List?> takeSnapshot({
     required int mapId,
