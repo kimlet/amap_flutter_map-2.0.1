@@ -244,6 +244,15 @@ class MethodChannelAMapFlutterMap implements AMapFlutterPlatform {
     });
   }
 
+  Future<dynamic> fromScreenLocation(int x, int y, {required int mapId}) {
+    return channel(mapId)
+        .invokeMethod<dynamic>('map#calculatePosition', <String, dynamic>{
+      'x': x, 'y':y
+    });
+  }
+
+  
+
   ///清除选中marker
   Future<void> clearInfoWindow({required int mapId}) {
     return channel(mapId).invokeMethod<void>('markers#clearInfoWindow');

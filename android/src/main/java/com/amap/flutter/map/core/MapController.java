@@ -1,6 +1,7 @@
 package com.amap.flutter.map.core;
 
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.location.Location;
 
 
@@ -145,6 +146,12 @@ public class MapController
                     amap.removecache();
                     result.success(null);
                 }
+                break;
+            case Const.METHOD_MAP_CALCULATE_POSITION:
+                int x = (Integer) call.argument("x");
+                int y = (Integer) call.argument("y");
+                LatLng latLng =  amap.getProjection().fromScreenLocation(new Point(x, y));
+                result.success(ConvertUtil.latLngToList(latLng));
                 break;
             default:
                 LogUtil.w(CLASS_NAME, "onMethodCall not find methodId:" + call.method);

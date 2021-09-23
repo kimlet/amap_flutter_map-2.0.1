@@ -117,6 +117,9 @@ class AMapController {
   Future<void> setRenderFps(int fps) {
     return _methodChannel.setRenderFps(fps, mapId: mapId);
   }
+  Future<dynamic> fromScreenLocation(int x, int y) {
+    return _methodChannel.fromScreenLocation(x, y, mapId: mapId);
+  }
 
   Future<void> hideMarkerInfoWindow(){
     return _methodChannel.clearInfoWindow(mapId: mapId);
