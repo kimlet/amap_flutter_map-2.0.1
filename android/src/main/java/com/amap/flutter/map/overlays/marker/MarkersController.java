@@ -147,6 +147,8 @@ public class MarkersController
     protected BitmapDescriptor getBitmapDescriptor(boolean selected, String title, String snippet) {
         if ("index".equals(snippet)) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_my_position);
+        }else if("myLocation".equals(snippet)){
+            return BitmapDescriptorFactory.fromResource(R.drawable.ic_map_my_location);
         }
         View view = null;
         view = View.inflate(context, R.layout.info_window, null);
