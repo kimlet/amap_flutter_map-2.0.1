@@ -183,6 +183,7 @@ public class MarkersController
                     }
                     if ("metroText".equals(type)) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            view.setBackground(defaultSelected ? context.getDrawable(R.drawable.ic_info_window_selected_bg) : context.getDrawable(R.drawable.ic_info_window_bg));
                             textView.setCompoundDrawablesWithIntrinsicBounds(context.getDrawable(R.drawable.ic_metro), null, null, null);
                         }
                     }
