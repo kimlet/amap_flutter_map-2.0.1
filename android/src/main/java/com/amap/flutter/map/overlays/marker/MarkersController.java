@@ -94,6 +94,8 @@ public class MarkersController
         if (null == methodCall) {
             return;
         }
+        executors.shutdownNow();
+        executors = Executors.newSingleThreadExecutor();
         executors.submit(new Runnable() {
             @Override
             public void run() {
@@ -112,6 +114,9 @@ public class MarkersController
     public void addByList(List<Object> markersToAdd) {
         if (markersToAdd != null) {
             for (Object markerToAdd : markersToAdd) {
+                if(Thread.interrupted()){
+                    break;
+                }
                 add(markerToAdd);
             }
         }
@@ -208,6 +213,9 @@ public class MarkersController
     private void updateByList(List<Object> markersToChange) {
         if (markersToChange != null) {
             for (Object markerToChange : markersToChange) {
+                if(Thread.interrupted()){
+                    break;
+                }
                 update(markerToChange);
             }
         }
@@ -229,6 +237,9 @@ public class MarkersController
             return;
         }
         for (Object rawMarkerId : markerIdsToRemove) {
+            if(Thread.interrupted()){
+                break;
+            }
             if (rawMarkerId == null) {
                 continue;
             }
