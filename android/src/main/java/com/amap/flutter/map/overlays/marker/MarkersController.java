@@ -77,7 +77,7 @@ public class MarkersController
             case Const.METHOD_MARKER_CLEAR_INFO_WINDOW:
                 hideMarkerInfoWindow(selectedMarkerDartId, null);
                 selectedMarkerDartId = "";
-                result  .success(null);
+                result.success(null);
                 break;
 
         }
@@ -114,7 +114,7 @@ public class MarkersController
     public void addByList(List<Object> markersToAdd) {
         if (markersToAdd != null) {
             for (Object markerToAdd : markersToAdd) {
-                if(Thread.interrupted()){
+                if (Thread.interrupted()) {
                     break;
                 }
                 add(markerToAdd);
@@ -152,7 +152,7 @@ public class MarkersController
     protected BitmapDescriptor getBitmapDescriptor(boolean selected, String title, String snippet) {
         if ("index".equals(snippet)) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_my_position);
-        }else if("myLocation".equals(snippet)){
+        } else if ("myLocation".equals(snippet)) {
             return BitmapDescriptorFactory.fromResource(R.drawable.ic_map_my_location);
         }
         View view = null;
@@ -170,8 +170,9 @@ public class MarkersController
                 JSONObject jsonObject = new JSONObject(snippet);
                 String type = jsonObject.getString("type");
                 String num = jsonObject.getString("num");
+                boolean isSchool = jsonObject.optBoolean("isSchool", false);
                 boolean defaultSelected = jsonObject.getBoolean("selected");
-                if ("DISTRICT".equals(type) || "PRECINCT".equals(type) || "metroCircle".equals(type) || "school".equals(type)) {
+                if ("DISTRICT".equals(type) || "PRECINCT".equals(type) || "metroCircle".equals(type)) {
                     view.setBackgroundResource(selected || defaultSelected ? R.drawable.ic_map_circle_selected : R.drawable.ic_map_circle);
                     textView.setTextColor(selected || defaultSelected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
                     subTitleView.setTextColor(selected || defaultSelected ? context.getResources().getColor(android.R.color.white) : context.getResources().getColor(android.R.color.black));
@@ -181,6 +182,10 @@ public class MarkersController
                     }
                     if ("metroCircle".equals(type)) {
                         subTitleView.setVisibility(View.GONE);
+                    }
+                    if (isSchool && "PRECINCT".equals(type)) {
+                        textView.setTextColor(context.getResources().getColor(android.R.color.white));
+                        view.setBackgroundResource(selected || defaultSelected ? R.drawable.ic_info_school_window_bg : R.drawable.ic_info_school_window_bg2);
                     }
                 } else if ("COMMUNITY".equals(type) || "metroText".equals(type)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -197,6 +202,10 @@ public class MarkersController
                     subTitleView.setVisibility(View.GONE);
                 } else if ("metroPoint".equals(type)) {
                     return BitmapDescriptorFactory.fromResource(R.drawable.ic_map_point);
+                } else if ("school".equals(type)) {
+                    view.setBackgroundResource(selected || defaultSelected ? R.drawable.ic_info_school_window_bg : R.drawable.ic_info_school_window_bg2);
+                    textView.setTextColor(context.getResources().getColor(android.R.color.white));
+                    subTitleView.setVisibility(View.GONE);
                 }
 
             } catch (JSONException e) {
@@ -213,7 +222,7 @@ public class MarkersController
     private void updateByList(List<Object> markersToChange) {
         if (markersToChange != null) {
             for (Object markerToChange : markersToChange) {
-                if(Thread.interrupted()){
+                if (Thread.interrupted()) {
                     break;
                 }
                 update(markerToChange);
@@ -237,7 +246,7 @@ public class MarkersController
             return;
         }
         for (Object rawMarkerId : markerIdsToRemove) {
-            if(Thread.interrupted()){
+            if (Thread.interrupted()) {
                 break;
             }
             if (rawMarkerId == null) {
